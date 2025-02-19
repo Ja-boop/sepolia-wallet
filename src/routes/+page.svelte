@@ -1,38 +1,73 @@
 <script lang="ts">
+	import { slide } from 'svelte/transition';
 	import useEthereum from '$lib/composables/ethereum.svelte';
+	import RefreshIcon from '$lib/icons/RefreshIcon.svelte';
+	import { truncateText } from '$lib/utils';
+	import { onDestroy } from 'svelte';
 
-	const { useConnect, useDisconnect, address, useBalance } = $derived(useEthereum());
+	const { useConnect, useDisconnect, account, useBalance, unwatch } = $derived(useEthereum());
 	const balance = $derived(useBalance());
+	const isLoading = $derived(account.address && $balance.isPending);
 
 	async function onClick() {
-		if (address) {
+		if (account.address) {
 			await useDisconnect();
 		} else {
 			await useConnect();
 		}
 	}
+
+	onDestroy(() => {
+		unwatch();
+	});
 </script>
 
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<div class="mx-6 flex flex-col gap-24">
+	<div class="flex flex-col gap-3">
+		<h1 class="text-3xl font-semibold">Check your balance</h1>
+		<h2 class="text-xl font-medium">Check your USDT balance for Sepolia network</h2>
+	</div>
 
-<p>Address: {address}</p>
+	<div class="flex flex-col gap-7">
+		{#if account.address}
+			<div
+				transition:slide
+				class="bg-primary-500/10 relative flex flex-col items-center justify-center rounded-lg"
+			>
+				<p class={`my-14 text-4xl font-semibold ${isLoading ? 'animate-pulse' : ''}`}>
+					{#if isLoading || !account.address}
+						0 USDT
+					{/if}
 
-<button onclick={onClick}>{address ? 'Disconnect' : 'Connect'}</button>
+					{#if $balance.error}
+						Error!
+					{/if}
 
-{#if address}
-	<div>
-		{#if $balance.isPending}
-			Loading...
-		{/if}
-		{#if $balance.error}
-			An error has occurred:
-			{$balance.error.message}
-		{/if}
-		{#if $balance.isSuccess}
-			<div>
-				<strong>👀 {$balance.data.formatted}</strong>{' '}
+					{#if $balance.isSuccess}
+						{$balance.data.formatted} USDT
+					{/if}
+				</p>
+
+				{#if $balance.error}
+					<button
+						transition:slide
+						onclick={() => $balance.refetch()}
+						class="absolute bottom-0 left-0 m-2"
+						disabled={isLoading}
+					>
+						<RefreshIcon />
+					</button>
+				{/if}
 			</div>
 		{/if}
+
+		<button
+			onclick={onClick}
+			class="bg-primary-500 flex flex-col items-center justify-center rounded-lg"
+		>
+			<p class={`my-4 truncate text-white`}>
+				{account.address ? truncateText(account.address, 8) : 'Connect your wallet'}
+			</p>
+		</button>
 	</div>
-{/if}
+</div>
