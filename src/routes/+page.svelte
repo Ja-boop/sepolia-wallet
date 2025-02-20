@@ -35,10 +35,6 @@
 	});
 </script>
 
-<svelte:head>
-	<title>USDT Balance - Sepolia</title>
-</svelte:head>
-
 <div
 	class="relative mx-6 mt-40 flex flex-col items-center justify-center gap-24 lg:flex-row lg:gap-72"
 >

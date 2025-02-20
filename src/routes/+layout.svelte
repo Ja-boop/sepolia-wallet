@@ -7,6 +7,10 @@
 	let { children } = $props();
 </script>
 
+<svelte:head>
+	<title>USDT Balance - Sepolia</title>
+</svelte:head>
+
 <main>
 	<QueryClientProvider client={queryClient}>
 		<header class="p-2 lg:p-5">
