@@ -4,23 +4,34 @@
 	import RefreshIcon from '$lib/icons/RefreshIcon.svelte';
 	import { truncateText } from '$lib/utils';
 	import { onDestroy } from 'svelte';
+	import Button from '$lib/components/Button.svelte';
+	import CloseIcon from '$lib/icons/CloseIcon.svelte';
 
 	const { useConnect, useDisconnect, account, useBalance, unwatch } = $derived(useEthereum());
 	const balance = $derived(useBalance());
 	const isLoading = $derived(account.address && $balance.isPending);
-
-	async function onClick() {
-		if (account.address) {
-			await useDisconnect();
-		} else {
-			await useConnect();
+	const balanceText = $derived.by(() => {
+		if (isLoading) {
+			return 'Loading...';
 		}
-	}
+
+		if ($balance.error) {
+			return 'Error!';
+		}
+
+		if ($balance.isSuccess) {
+			return `${$balance.data.formatted} USDT`;
+		}
+	});
 
 	onDestroy(() => {
 		unwatch();
 	});
 </script>
+
+<svelte:head>
+	<title>USDT Balance - Sepolia</title>
+</svelte:head>
 
 <div class="mx-6 flex flex-col gap-24">
 	<div class="flex flex-col gap-3">
@@ -35,17 +46,7 @@
 				class="bg-primary-500/10 relative flex flex-col items-center justify-center rounded-lg"
 			>
 				<p class={`my-14 text-4xl font-semibold ${isLoading ? 'animate-pulse' : ''}`}>
-					{#if isLoading || !account.address}
-						0 USDT
-					{/if}
-
-					{#if $balance.error}
-						Error!
-					{/if}
-
-					{#if $balance.isSuccess}
-						{$balance.data.formatted} USDT
-					{/if}
+					{balanceText}
 				</p>
 
 				{#if $balance.error}
@@ -61,13 +62,21 @@
 			</div>
 		{/if}
 
-		<button
-			onclick={onClick}
-			class="bg-primary-500 flex flex-col items-center justify-center rounded-lg"
-		>
-			<p class={`my-4 truncate text-white`}>
-				{account.address ? truncateText(account.address, 8) : 'Connect your wallet'}
-			</p>
-		</button>
+		<div class="relative w-full">
+			<Button onclick={useConnect}>
+				<p class="my-4 text-white">
+					{account.address ? truncateText(account.address, 8) : 'Connect your wallet'}
+				</p>
+			</Button>
+
+			{#if account.address}
+				<button
+					onclick={useDisconnect}
+					class="absolute top-1/2 right-0 -translate-x-1/2 -translate-y-1/2 cursor-pointer"
+				>
+					<CloseIcon />
+				</button>
+			{/if}
+		</div>
 	</div>
 </div>
