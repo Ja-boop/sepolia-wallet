@@ -4,7 +4,7 @@
 	import RefreshIcon from '$lib/icons/RefreshIcon.svelte';
 	import { truncateText } from '$lib/utils';
 	import { onDestroy } from 'svelte';
-	import Button from '$lib/components/Button.svelte';
+	import Button from '$lib/components/base/Button.svelte';
 	import CloseIcon from '$lib/icons/CloseIcon.svelte';
 	import illustration from '$lib/assets/illustration.png';
 	import { wallet } from '$lib/composables/wallet.svelte';
@@ -35,10 +35,6 @@
 	});
 </script>
 
-<svelte:head>
-	<title>USDT Balance - Sepolia</title>
-</svelte:head>
-
 <div
 	class="relative mx-6 mt-40 flex flex-col items-center justify-center gap-24 lg:flex-row lg:gap-72"
 >
@@ -58,28 +54,29 @@
 
 	<div class="flex w-full flex-col gap-7 lg:h-80 lg:w-96">
 		{#if account.address}
-			<h3 transition:slide class="text-xl font-medium">Balance:</h3>
+			<div transition:slide>
+				<h3 class="text-xl font-medium">Balance:</h3>
 
-			<div
-				transition:slide
-				class="bg-primary-500/10 relative flex h-40 flex-col items-center justify-center rounded-lg px-5 py-14 text-center"
-			>
-				<p
-					class={`${$balance.isError ? 'text-xl' : 'text-4xl'} font-semibold ${isLoading ? 'animate-pulse' : ''}`}
+				<div
+					class="bg-primary-500/10 relative flex h-40 flex-col items-center justify-center rounded-lg px-5 py-14 text-center"
 				>
-					{balanceText}
-				</p>
-
-				{#if $balance.error}
-					<button
-						transition:slide
-						onclick={() => $balance.refetch()}
-						class="absolute bottom-0 left-0 m-2 cursor-pointer"
-						disabled={isLoading}
+					<p
+						class={`${$balance.isError ? 'text-xl' : 'text-4xl'} font-semibold ${isLoading ? 'animate-pulse' : ''}`}
 					>
-						<RefreshIcon />
-					</button>
-				{/if}
+						{balanceText}
+					</p>
+
+					{#if $balance.error}
+						<button
+							transition:slide
+							onclick={() => $balance.refetch()}
+							class="absolute bottom-0 left-0 m-2 cursor-pointer"
+							disabled={isLoading}
+						>
+							<RefreshIcon />
+						</button>
+					{/if}
+				</div>
 			</div>
 		{/if}
 
