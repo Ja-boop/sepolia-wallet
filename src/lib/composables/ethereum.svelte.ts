@@ -24,7 +24,6 @@ function useEthereum() {
 
 	async function useConnect() {
 		await connect(config, { connector: metaMask() });
-		account = getAccount(config);
 	}
 
 	async function useDisconnect() {
