@@ -15,7 +15,7 @@
 		{
 			variants: {
 				color: {
-					primary: 'bg-primary-500'
+					primary: 'bg-primary-500 hover:bg-primary-500/80'
 				}
 			}
 		}
