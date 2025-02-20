@@ -41,6 +41,8 @@
 
 	<div class="flex flex-col gap-7">
 		{#if account.address}
+			<h3 transition:slide class="text-xl font-medium">Balance:</h3>
+
 			<div
 				transition:slide
 				class="bg-primary-500/10 relative flex flex-col items-center justify-center rounded-lg"
