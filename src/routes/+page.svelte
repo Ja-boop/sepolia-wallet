@@ -12,6 +12,20 @@
 	const { useConnect, useDisconnect, account, useBalance, unwatch } = $derived(useEthereum());
 	const balance = $derived(useBalance());
 	const isLoading = $derived(account.address && $balance.isPending);
+	let isConnectError = $state(false);
+
+	const connectButtonText = $derived.by(() => {
+		if (isConnectError) {
+			return 'There was an error, please try again';
+		}
+
+		if (account.address) {
+			return truncateText(account.address, 8);
+		}
+
+		return 'Connect your wallet';
+	});
+
 	const balanceText = $derived.by(() => {
 		if (isLoading) {
 			return 'Loading...';
@@ -26,8 +40,15 @@
 		}
 	});
 
-	function handleOnConnect() {
-		useConnect(wallet.selected.connector);
+	async function handleOnConnect() {
+		isConnectError = false;
+
+		try {
+			await useConnect(wallet.selected.connector);
+			isConnectError = false;
+		} catch (error) {
+			isConnectError = true;
+		}
 	}
 
 	onDestroy(() => {
@@ -83,11 +104,11 @@
 		<div class="relative w-full text-center">
 			{#if account.address}
 				<p class="bg-primary-500 rounded-lg py-4 text-white">
-					{truncateText(account.address, 8)}
+					{connectButtonText}
 				</p>
 			{:else}
 				<Button onclick={handleOnConnect} disabled={account.isConnected}>
-					<p class="py-4 text-white">Connect your wallet</p>
+					<p class="py-4 text-white">{connectButtonText}</p>
 				</Button>
 			{/if}
 
@@ -96,7 +117,7 @@
 					onclick={useDisconnect}
 					class="absolute top-1/2 right-0 -translate-x-1/2 -translate-y-1/2 cursor-pointer"
 				>
-					<CloseIcon />
+					<CloseIcon class="hover:fill-gray-300" />
 				</button>
 			{/if}
 		</div>
