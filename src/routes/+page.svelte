@@ -4,7 +4,7 @@
 	import RefreshIcon from '$lib/icons/RefreshIcon.svelte';
 	import { truncateText } from '$lib/utils';
 	import { onDestroy } from 'svelte';
-	import Button from '$lib/components/Button.svelte';
+	import Button from '$lib/components/base/Button.svelte';
 	import CloseIcon from '$lib/icons/CloseIcon.svelte';
 	import illustration from '$lib/assets/illustration.png';
 	import { wallet } from '$lib/composables/wallet.svelte';

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import '../app.css';
 	import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
-	import Dropdown from '$lib/components/Dropdown.svelte';
+	import DropdownWallets from '$lib/components/wallets/DropdownWallets.svelte';
 
 	const queryClient = new QueryClient();
 	let { children } = $props();
@@ -10,7 +10,7 @@
 <main>
 	<QueryClientProvider client={queryClient}>
 		<header class="p-2 lg:p-5">
-			<Dropdown />
+			<DropdownWallets />
 		</header>
 
 		{@render children()}
