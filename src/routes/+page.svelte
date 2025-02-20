@@ -57,10 +57,10 @@
 
 			<div
 				transition:slide
-				class="bg-primary-500/10 relative flex flex-col items-center justify-center rounded-lg text-center"
+				class="bg-primary-500/10 relative flex h-40 flex-col items-center justify-center rounded-lg px-5 py-14 text-center"
 			>
 				<p
-					class={`my-14 ${$balance.isError ? 'text-xl' : 'text-4xl'} font-semibold ${isLoading ? 'animate-pulse' : ''}`}
+					class={`${$balance.isError ? 'text-xl' : 'text-4xl'} font-semibold ${isLoading ? 'animate-pulse' : ''}`}
 				>
 					{balanceText}
 				</p>
