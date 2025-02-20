@@ -1,15 +1,23 @@
-import { createConfig, http, getAccount, connect, disconnect, watchAccount } from '@wagmi/core';
+import {
+	createConfig,
+	http,
+	getAccount,
+	connect,
+	disconnect,
+	watchAccount,
+	type CreateConnectorFn
+} from '@wagmi/core';
 import { sepolia } from '@wagmi/core/chains';
 import { metaMask } from '@wagmi/connectors';
 import { getBalanceQueryOptions } from '@wagmi/core/query';
 import { createQuery } from '@tanstack/svelte-query';
-import { PUBLIC_USDT_CONTRACT_ADDRESS } from '$env/static/public';
+import { PUBLIC_SEPOLIA_URL, PUBLIC_USDT_CONTRACT_ADDRESS } from '$env/static/public';
 
 const config = createConfig({
 	chains: [sepolia],
 	connectors: [metaMask()],
 	transports: {
-		[sepolia.id]: http()
+		[sepolia.id]: http(PUBLIC_SEPOLIA_URL || undefined)
 	}
 });
 
@@ -22,8 +30,8 @@ function useEthereum() {
 		}
 	});
 
-	async function useConnect() {
-		await connect(config, { connector: metaMask() });
+	async function useConnect(connector: CreateConnectorFn) {
+		await connect(config, { connector });
 	}
 
 	async function useDisconnect() {
