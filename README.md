@@ -1,38 +1,32 @@
-# sv
+# Sepolia-Wallet
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+Web interface to see the balance of USDT of an account from the Sepolia chain.
 
-## Creating a project
-
-If you're seeing this, you've probably already done this step. Congrats!
+## How to run it
 
 ```bash
-# create a new project in the current directory
-npx sv create
+# install dependencies
+yarn
 
-# create a new project in my-app
-npx sv create my-app
+# run the project
+yarn dev
+
+# run tests
+yarn test:e2e
 ```
 
-## Developing
+## Environment Variables
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+There is a `env.dist` file, use it to create the `.env` file
 
 ```bash
-npm run dev
+# Custom RPC URL for the Sepolia chain, if there is no value, wagmi will use the default one
+PUBLIC_SEPOLIA_URL=
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+# Contract address for the USDT token
+PUBLIC_USDT_CONTRACT_ADDRESS=
 ```
+## Supported Wallets
+- MetaMask
 
-## Building
 
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
