@@ -17,7 +17,7 @@
 		}
 
 		if ($balance.error) {
-			return 'Error!';
+			return 'There was a problem, please try again';
 		}
 
 		if ($balance.isSuccess) {
@@ -57,9 +57,11 @@
 
 			<div
 				transition:slide
-				class="bg-primary-500/10 relative flex flex-col items-center justify-center rounded-lg"
+				class="bg-primary-500/10 relative flex flex-col items-center justify-center rounded-lg text-center"
 			>
-				<p class={`my-14 text-4xl font-semibold ${isLoading ? 'animate-pulse' : ''}`}>
+				<p
+					class={`my-14 ${$balance.isError ? 'text-xl' : 'text-4xl'} font-semibold ${isLoading ? 'animate-pulse' : ''}`}
+				>
 					{balanceText}
 				</p>
 
