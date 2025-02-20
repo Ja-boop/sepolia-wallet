@@ -35,23 +35,23 @@
 </svelte:head>
 
 <div
-	class="relative mx-6 mt-40 flex flex-col items-center justify-center gap-24 md:flex-row md:gap-72"
+	class="relative mx-6 mt-40 flex flex-col items-center justify-center gap-24 lg:flex-row lg:gap-72"
 >
 	<div class="flex flex-col gap-3 self-start">
-		<h1 class="text-3xl font-semibold md:text-5xl">Check your balance</h1>
-		<h2 class="text-xl font-normal md:w-70 md:text-3xl/11">
+		<h1 class="text-3xl font-semibold lg:text-5xl">Check your balance</h1>
+		<h2 class="text-xl font-normal lg:w-70 lg:text-3xl/11">
 			Check your USDT balance for Sepolia network
 		</h2>
 	</div>
 
 	<img
-		class="absolute top-10 hidden md:block"
+		class="absolute top-10 hidden lg:block"
 		alt="illustration"
 		src={illustration}
 		width="300px"
 	/>
 
-	<div class="flex w-full flex-col gap-7 md:h-80 md:w-96">
+	<div class="flex w-full flex-col gap-7 lg:h-80 lg:w-96">
 		{#if account.address}
 			<h3 transition:slide class="text-xl font-medium">Balance:</h3>
 
