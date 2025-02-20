@@ -6,6 +6,7 @@
 	import { onDestroy } from 'svelte';
 	import Button from '$lib/components/Button.svelte';
 	import CloseIcon from '$lib/icons/CloseIcon.svelte';
+	import illustration from '$lib/assets/illustration.png';
 
 	const { useConnect, useDisconnect, account, useBalance, unwatch } = $derived(useEthereum());
 	const balance = $derived(useBalance());
@@ -33,13 +34,24 @@
 	<title>USDT Balance - Sepolia</title>
 </svelte:head>
 
-<div class="mx-6 flex flex-col gap-24">
-	<div class="flex flex-col gap-3">
-		<h1 class="text-3xl font-semibold">Check your balance</h1>
-		<h2 class="text-xl font-medium">Check your USDT balance for Sepolia network</h2>
+<div
+	class="relative mx-6 mt-40 flex flex-col items-center justify-center gap-24 md:flex-row md:gap-72"
+>
+	<div class="flex flex-col gap-3 self-start">
+		<h1 class="text-3xl font-semibold md:text-5xl">Check your balance</h1>
+		<h2 class="text-xl font-normal md:w-70 md:text-3xl/11">
+			Check your USDT balance for Sepolia network
+		</h2>
 	</div>
 
-	<div class="flex flex-col gap-7">
+	<img
+		class="absolute top-10 hidden md:block"
+		alt="illustration"
+		src={illustration}
+		width="300px"
+	/>
+
+	<div class="flex w-full flex-col gap-7 md:h-80 md:w-96">
 		{#if account.address}
 			<h3 transition:slide class="text-xl font-medium">Balance:</h3>
 
@@ -55,7 +67,7 @@
 					<button
 						transition:slide
 						onclick={() => $balance.refetch()}
-						class="absolute bottom-0 left-0 m-2"
+						class="absolute bottom-0 left-0 m-2 cursor-pointer"
 						disabled={isLoading}
 					>
 						<RefreshIcon />
@@ -64,12 +76,16 @@
 			</div>
 		{/if}
 
-		<div class="relative w-full">
-			<Button onclick={useConnect}>
-				<p class="my-4 text-white">
-					{account.address ? truncateText(account.address, 8) : 'Connect your wallet'}
+		<div class="relative w-full text-center">
+			{#if account.address}
+				<p class="bg-primary-500 rounded-lg py-4 text-white">
+					{truncateText(account.address, 8)}
 				</p>
-			</Button>
+			{:else}
+				<Button onclick={useConnect} disabled={account.isConnected}>
+					<p class="py-4 text-white">Connect your wallet</p>
+				</Button>
+			{/if}
 
 			{#if account.address}
 				<button

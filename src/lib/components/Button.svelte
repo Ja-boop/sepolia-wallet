@@ -10,13 +10,16 @@
 
 	let { color = 'primary', children, ...rest }: Props = $props();
 
-	const buttonClasses = cva([`w-full flex flex-col items-center justify-center rounded-lg`], {
-		variants: {
-			color: {
-				primary: 'bg-primary-500'
+	const buttonClasses = cva(
+		[`w-full flex flex-col items-center justify-center rounded-lg cursor-pointer`],
+		{
+			variants: {
+				color: {
+					primary: 'bg-primary-500'
+				}
 			}
 		}
-	});
+	);
 </script>
 
 <button class={buttonClasses({ color })} {...rest}>
