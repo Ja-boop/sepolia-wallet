@@ -7,6 +7,7 @@
 	import Button from '$lib/components/Button.svelte';
 	import CloseIcon from '$lib/icons/CloseIcon.svelte';
 	import illustration from '$lib/assets/illustration.png';
+	import { wallet } from '$lib/composables/wallet.svelte';
 
 	const { useConnect, useDisconnect, account, useBalance, unwatch } = $derived(useEthereum());
 	const balance = $derived(useBalance());
@@ -24,6 +25,10 @@
 			return `${$balance.data.formatted} USDT`;
 		}
 	});
+
+	function handleOnConnect() {
+		useConnect(wallet.selected.connector);
+	}
 
 	onDestroy(() => {
 		unwatch();
@@ -84,7 +89,7 @@
 					{truncateText(account.address, 8)}
 				</p>
 			{:else}
-				<Button onclick={useConnect} disabled={account.isConnected}>
+				<Button onclick={handleOnConnect} disabled={account.isConnected}>
 					<p class="py-4 text-white">Connect your wallet</p>
 				</Button>
 			{/if}
