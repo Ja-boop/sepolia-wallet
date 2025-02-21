@@ -4,14 +4,10 @@
 		ethereumStore,
 		createOnConnectMutation,
 		createOnDisconnectMutation,
-		createOnReconnectMutation,
-		createBalanceQuery,
-		unwatchAccount,
-		unwatchConnections
+		createBalanceQuery
 	} from '$lib/stores/ethereum.svelte';
 	import RefreshIcon from '$lib/icons/RefreshIcon.svelte';
 	import { truncateText } from '$lib/utils';
-	import { onDestroy } from 'svelte';
 	import Button from '$lib/components/base/Button.svelte';
 	import CloseIcon from '$lib/icons/CloseIcon.svelte';
 	import illustration from '$lib/assets/illustration.png';
@@ -47,11 +43,6 @@
 		if ($balanceQuery.isSuccess) {
 			return `${$balanceQuery.data.formatted} USDT`;
 		}
-	});
-
-	onDestroy(() => {
-		unwatchConnections();
-		unwatchAccount();
 	});
 </script>
 
