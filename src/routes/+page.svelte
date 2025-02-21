@@ -1,6 +1,12 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
-	import useEthereum from '$lib/stores/ethereum.svelte';
+	import {
+		ethereumStore,
+		useConnect,
+		useDisconnect,
+		useBalance,
+		unwatch
+	} from '$lib/stores/ethereum.svelte';
 	import RefreshIcon from '$lib/icons/RefreshIcon.svelte';
 	import { truncateText } from '$lib/utils';
 	import { onDestroy } from 'svelte';
@@ -9,7 +15,7 @@
 	import illustration from '$lib/assets/illustration.png';
 	import { wallet } from '$lib/stores/wallet.svelte';
 
-	const { useConnect, useDisconnect, account, useBalance, unwatch } = $derived(useEthereum());
+	const { account } = $derived(ethereumStore);
 	const balance = $derived(useBalance());
 	const isLoading = $derived(account.address && $balance.isPending);
 	let isConnectError = $state(false);

@@ -21,43 +21,33 @@ const config = createConfig({
 	}
 });
 
-function useEthereum() {
-	let account = $state(getAccount(config));
+const ethereumStore = $state({
+	account: getAccount(config)
+});
 
-	const unwatch = watchAccount(config, {
-		onChange(data) {
-			account = data;
-		}
-	});
-
-	async function useConnect(connector: CreateConnectorFn) {
-		await connect(config, { connector });
+const unwatch = watchAccount(config, {
+	onChange(data) {
+		ethereumStore.account = data;
 	}
+});
 
-	async function useDisconnect() {
-		await disconnect(config, { connector: account.connector });
-	}
-
-	function useBalance() {
-		return createQuery({
-			...getBalanceQueryOptions(config, {
-				address: account.address,
-				token: PUBLIC_USDT_CONTRACT_ADDRESS as `0x${string}`
-			}),
-			enabled: account.isConnected,
-			retry: false
-		});
-	}
-
-	return {
-		get account() {
-			return account;
-		},
-		useConnect,
-		useDisconnect,
-		useBalance,
-		unwatch
-	};
+async function useConnect(connector: CreateConnectorFn) {
+	await connect(config, { connector });
 }
 
-export default useEthereum;
+async function useDisconnect() {
+	await disconnect(config, { connector: ethereumStore.account.connector });
+}
+
+function useBalance() {
+	return createQuery({
+		...getBalanceQueryOptions(config, {
+			address: ethereumStore.account.address,
+			token: PUBLIC_USDT_CONTRACT_ADDRESS as `0x${string}`
+		}),
+		enabled: ethereumStore.account.isConnected,
+		retry: false
+	});
+}
+
+export { useBalance, useConnect, useDisconnect, unwatch, ethereumStore };
