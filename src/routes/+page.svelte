@@ -2,26 +2,30 @@
 	import { slide } from 'svelte/transition';
 	import {
 		ethereumStore,
-		useConnect,
-		useDisconnect,
-		useBalance,
-		unwatch
+		createOnConnectMutation,
+		createOnDisconnectMutation,
+		createOnReconnectMutation,
+		createBalanceQuery,
+		unwatchAccount,
+		unwatchConnections
 	} from '$lib/stores/ethereum.svelte';
 	import RefreshIcon from '$lib/icons/RefreshIcon.svelte';
 	import { truncateText } from '$lib/utils';
-	import { onDestroy } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 	import Button from '$lib/components/base/Button.svelte';
 	import CloseIcon from '$lib/icons/CloseIcon.svelte';
 	import illustration from '$lib/assets/illustration.png';
 	import { wallet } from '$lib/stores/wallet.svelte';
 
+	const connectMutation = createOnConnectMutation();
+	const disconnectMutation = createOnDisconnectMutation();
+	const reconnectMutation = createOnReconnectMutation();
+	const balance = $derived(createBalanceQuery());
 	const { account } = $derived(ethereumStore);
-	const balance = $derived(useBalance());
 	const isLoading = $derived(account.address && $balance.isPending);
-	let isConnectError = $state(false);
 
 	const connectButtonText = $derived.by(() => {
-		if (isConnectError) {
+		if ($connectMutation.isError) {
 			return 'There was an error, please try again';
 		}
 
@@ -46,19 +50,13 @@
 		}
 	});
 
-	async function handleOnConnect() {
-		isConnectError = false;
-
-		try {
-			await useConnect(wallet.selected.connector);
-			isConnectError = false;
-		} catch (error) {
-			isConnectError = true;
-		}
-	}
+	onMount(() => {
+		$reconnectMutation.mutate({ connectors: [wallet.selected.connector] });
+	});
 
 	onDestroy(() => {
-		unwatch();
+		unwatchConnections();
+		unwatchAccount();
 	});
 </script>
 
@@ -113,14 +111,17 @@
 					{connectButtonText}
 				</p>
 			{:else}
-				<Button onclick={handleOnConnect} disabled={account.isConnected}>
+				<Button
+					onclick={() => $connectMutation.mutate({ connector: wallet.selected.connector })}
+					disabled={account.isConnected}
+				>
 					<p class="py-4 text-white">{connectButtonText}</p>
 				</Button>
 			{/if}
 
 			{#if account.address}
 				<button
-					onclick={useDisconnect}
+					onclick={() => $disconnectMutation.mutate({ connector: account.connector })}
 					class="absolute top-1/2 right-0 -translate-x-1/2 -translate-y-1/2 cursor-pointer"
 				>
 					<CloseIcon class="hover:fill-gray-300" />
