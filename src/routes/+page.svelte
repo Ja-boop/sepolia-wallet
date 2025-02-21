@@ -20,12 +20,12 @@
 	const isLoading = $derived(account.address && $balanceQuery.isPending);
 
 	const connectButtonText = $derived.by(() => {
-		if ($connectMutation.isError) {
-			return 'There was an error, please try again';
-		}
-
 		if (account.address) {
 			return truncateText(account.address, 8);
+		}
+
+		if ($connectMutation.isError) {
+			return 'There was an error, please try again';
 		}
 
 		return 'Connect your wallet';
