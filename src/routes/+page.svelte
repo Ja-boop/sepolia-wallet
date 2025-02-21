@@ -15,7 +15,7 @@
 
 	const connectMutation = createOnConnectMutation();
 	const disconnectMutation = createOnDisconnectMutation();
-	const getBalanceFromContractQuery = createGetBalanceFromContractQuery();
+	const getBalanceFromContractQuery = $derived(createGetBalanceFromContractQuery());
 	const { account } = $derived(ethereumStore);
 	const isLoading = $derived(account.address && $getBalanceFromContractQuery.isPending);
 
@@ -77,7 +77,7 @@
 						{balanceText}
 					</p>
 
-					{#if $getBalanceFromContractQuery.error}
+					{#if $getBalanceFromContractQuery.isError}
 						<button
 							transition:slide
 							onclick={() => $getBalanceFromContractQuery.refetch()}
