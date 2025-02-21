@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { slide } from 'svelte/transition';
-	import useEthereum from '$lib/composables/ethereum.svelte';
+	import useEthereum from '$lib/stores/ethereum.svelte';
 	import RefreshIcon from '$lib/icons/RefreshIcon.svelte';
 	import { truncateText } from '$lib/utils';
 	import { onDestroy } from 'svelte';
 	import Button from '$lib/components/base/Button.svelte';
 	import CloseIcon from '$lib/icons/CloseIcon.svelte';
 	import illustration from '$lib/assets/illustration.png';
-	import { wallet } from '$lib/composables/wallet.svelte';
+	import { wallet } from '$lib/stores/wallet.svelte';
 
 	const { useConnect, useDisconnect, account, useBalance, unwatch } = $derived(useEthereum());
 	const balance = $derived(useBalance());

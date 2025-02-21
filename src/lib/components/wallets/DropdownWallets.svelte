@@ -1,7 +1,7 @@
 <script lang="ts">
 	import CheckIcon from '$lib/icons/CheckIcon.svelte';
 	import { WalletName } from '$lib/types';
-	import { wallet, setWallet } from '$lib/composables/wallet.svelte';
+	import { wallet, setWallet } from '$lib/stores/wallet.svelte';
 	import Dropdown from '../base/Dropdown.svelte';
 
 	const wallets: WalletName[] = Object.values(WalletName);
