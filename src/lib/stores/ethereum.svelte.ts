@@ -51,26 +51,20 @@ const unwatchConnections = watchConnections(config, {
 });
 
 function createOnConnectMutation() {
-	const mutationOptions = connectMutationOptions(config);
-
 	return createMutation({
-		...mutationOptions
+		...connectMutationOptions(config)
 	});
 }
 
 function createOnDisconnectMutation() {
-	const mutationOptions = disconnectMutationOptions(config);
-
 	return createMutation({
-		...mutationOptions
+		...disconnectMutationOptions(config)
 	});
 }
 
 function createOnReconnectMutation() {
-	const mutationOptions = reconnectMutationOptions(config);
-
 	return createMutation({
-		...mutationOptions
+		...reconnectMutationOptions(config)
 	});
 }
 
@@ -92,6 +86,5 @@ export {
 	createOnConnectMutation,
 	createOnDisconnectMutation,
 	createOnReconnectMutation,
-	ethereumStore,
-	config
+	ethereumStore
 };
