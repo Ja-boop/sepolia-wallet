@@ -19,9 +19,9 @@
 
 	const connectMutation = createOnConnectMutation();
 	const disconnectMutation = createOnDisconnectMutation();
-	const balance = $derived(createBalanceQuery());
+	const balanceQuery = $derived(createBalanceQuery());
 	const { account } = $derived(ethereumStore);
-	const isLoading = $derived(account.address && $balance.isPending);
+	const isLoading = $derived(account.address && $balanceQuery.isPending);
 
 	const connectButtonText = $derived.by(() => {
 		if ($connectMutation.isError) {
@@ -40,12 +40,12 @@
 			return 'Loading...';
 		}
 
-		if ($balance.error) {
+		if ($balanceQuery.error) {
 			return 'There was a problem, please try again';
 		}
 
-		if ($balance.isSuccess) {
-			return `${$balance.data.formatted} USDT`;
+		if ($balanceQuery.isSuccess) {
+			return `${$balanceQuery.data.formatted} USDT`;
 		}
 	});
 
@@ -81,15 +81,15 @@
 					class="bg-primary-500/10 relative flex h-40 flex-col items-center justify-center rounded-lg px-5 py-14 text-center"
 				>
 					<p
-						class={`${$balance.isError ? 'text-xl' : 'text-4xl'} font-semibold ${isLoading ? 'animate-pulse' : ''}`}
+						class={`${$balanceQuery.isError ? 'text-xl' : 'text-4xl'} font-semibold ${isLoading ? 'animate-pulse' : ''}`}
 					>
 						{balanceText}
 					</p>
 
-					{#if $balance.error}
+					{#if $balanceQuery.error}
 						<button
 							transition:slide
-							onclick={() => $balance.refetch()}
+							onclick={() => $balanceQuery.refetch()}
 							class="absolute bottom-0 left-0 m-2 cursor-pointer"
 							disabled={isLoading}
 						>
