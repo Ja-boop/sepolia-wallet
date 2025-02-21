@@ -11,11 +11,14 @@ import { metaMask } from '@wagmi/connectors';
 import {
 	connectMutationOptions,
 	disconnectMutationOptions,
+	reconnectMutationOptions,
 	getBalanceQueryOptions,
-	reconnectMutationOptions
+	readContractQueryOptions
 } from '@wagmi/core/query';
 import { createQuery, createMutation } from '@tanstack/svelte-query';
 import { PUBLIC_SEPOLIA_URL, PUBLIC_USDT_CONTRACT_ADDRESS } from '$env/static/public';
+import abi from '$lib/abi/erc20.abi.json';
+import BigNumber from 'bignumber.js';
 
 const config = createConfig({
 	chains: [sepolia],
@@ -68,7 +71,7 @@ function createOnReconnectMutation() {
 	});
 }
 
-function createBalanceQuery() {
+function createGetBalanceQuery() {
 	return createQuery({
 		...getBalanceQueryOptions(config, {
 			address: ethereumStore.account.address,
@@ -79,10 +82,28 @@ function createBalanceQuery() {
 	});
 }
 
+function createGetBalanceFromContractQuery() {
+	return createQuery({
+		...readContractQueryOptions(config, {
+			abi,
+			address: PUBLIC_USDT_CONTRACT_ADDRESS as `0x${string}`,
+			functionName: 'balanceOf',
+			args: [ethereumStore.account.address]
+		}),
+		select: (data) => {
+			if (typeof data === 'bigint') return new BigNumber(data.toString()).dividedBy(1e6).toString();
+			return data;
+		},
+		enabled: ethereumStore.account.isConnected,
+		retry: false
+	});
+}
+
 export {
 	unwatchAccount,
 	unwatchConnections,
-	createBalanceQuery,
+	createGetBalanceQuery,
+	createGetBalanceFromContractQuery,
 	createOnConnectMutation,
 	createOnDisconnectMutation,
 	createOnReconnectMutation,

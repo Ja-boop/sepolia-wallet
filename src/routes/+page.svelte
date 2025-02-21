@@ -4,7 +4,7 @@
 		ethereumStore,
 		createOnConnectMutation,
 		createOnDisconnectMutation,
-		createBalanceQuery
+		createGetBalanceFromContractQuery
 	} from '$lib/stores/ethereum.svelte';
 	import RefreshIcon from '$lib/icons/RefreshIcon.svelte';
 	import { truncateText } from '$lib/utils';
@@ -15,9 +15,9 @@
 
 	const connectMutation = createOnConnectMutation();
 	const disconnectMutation = createOnDisconnectMutation();
-	const balanceQuery = $derived(createBalanceQuery());
+	const getBalanceFromContractQuery = createGetBalanceFromContractQuery();
 	const { account } = $derived(ethereumStore);
-	const isLoading = $derived(account.address && $balanceQuery.isPending);
+	const isLoading = $derived(account.address && $getBalanceFromContractQuery.isPending);
 
 	const connectButtonText = $derived.by(() => {
 		if (account.address) {
@@ -36,12 +36,12 @@
 			return 'Loading...';
 		}
 
-		if ($balanceQuery.error) {
+		if ($getBalanceFromContractQuery.isError) {
 			return 'There was a problem, please try again';
 		}
 
-		if ($balanceQuery.isSuccess) {
-			return `${$balanceQuery.data.formatted} USDT`;
+		if ($getBalanceFromContractQuery.isSuccess) {
+			return `${$getBalanceFromContractQuery.data} USDT`;
 		}
 	});
 </script>
@@ -72,15 +72,15 @@
 					class="bg-primary-500/10 relative flex h-40 flex-col items-center justify-center rounded-lg px-5 py-14 text-center"
 				>
 					<p
-						class={`${$balanceQuery.isError ? 'text-xl' : 'text-4xl'} font-semibold ${isLoading ? 'animate-pulse' : ''}`}
+						class={`${$getBalanceFromContractQuery.isError ? 'text-xl' : 'text-4xl'} font-semibold ${isLoading ? 'animate-pulse' : ''}`}
 					>
 						{balanceText}
 					</p>
 
-					{#if $balanceQuery.error}
+					{#if $getBalanceFromContractQuery.error}
 						<button
 							transition:slide
-							onclick={() => $balanceQuery.refetch()}
+							onclick={() => $getBalanceFromContractQuery.refetch()}
 							class="absolute bottom-0 left-0 m-2 cursor-pointer"
 							disabled={isLoading}
 						>
