@@ -2,6 +2,7 @@
 	import '../app.css';
 	import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
 	import DropdownWallets from '$lib/components/wallets/DropdownWallets.svelte';
+	import EthereumProvider from '$lib/providers/EthereumProvider.svelte';
 
 	const queryClient = new QueryClient();
 	let { children } = $props();
@@ -13,10 +14,12 @@
 
 <main>
 	<QueryClientProvider client={queryClient}>
-		<header class="p-2 lg:p-5">
-			<DropdownWallets />
-		</header>
+		<EthereumProvider>
+			<header class="p-2 lg:p-5">
+				<DropdownWallets />
+			</header>
 
-		{@render children()}
+			{@render children()}
+		</EthereumProvider>
 	</QueryClientProvider>
 </main>

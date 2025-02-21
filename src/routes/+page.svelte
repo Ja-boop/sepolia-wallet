@@ -11,7 +11,7 @@
 	} from '$lib/stores/ethereum.svelte';
 	import RefreshIcon from '$lib/icons/RefreshIcon.svelte';
 	import { truncateText } from '$lib/utils';
-	import { onDestroy, onMount } from 'svelte';
+	import { onDestroy } from 'svelte';
 	import Button from '$lib/components/base/Button.svelte';
 	import CloseIcon from '$lib/icons/CloseIcon.svelte';
 	import illustration from '$lib/assets/illustration.png';
@@ -19,7 +19,6 @@
 
 	const connectMutation = createOnConnectMutation();
 	const disconnectMutation = createOnDisconnectMutation();
-	const reconnectMutation = createOnReconnectMutation();
 	const balance = $derived(createBalanceQuery());
 	const { account } = $derived(ethereumStore);
 	const isLoading = $derived(account.address && $balance.isPending);
@@ -48,10 +47,6 @@
 		if ($balance.isSuccess) {
 			return `${$balance.data.formatted} USDT`;
 		}
-	});
-
-	onMount(() => {
-		$reconnectMutation.mutate({ connectors: [wallet.selected.connector] });
 	});
 
 	onDestroy(() => {
