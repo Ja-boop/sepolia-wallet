@@ -2,6 +2,12 @@
 
 Web interface to see the balance of USDT of an account from the Sepolia chain.
 
+## Clone the repo
+
+```bash
+git clone https://github.com/Ja-boop/sepolia-wallet.git
+```
+
 ## How to run it
 
 ```bash
