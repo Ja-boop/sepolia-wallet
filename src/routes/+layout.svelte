@@ -3,6 +3,7 @@
 	import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
 	import DropdownWallets from '$lib/components/wallets/DropdownWallets.svelte';
 	import EthereumProvider from '$lib/providers/EthereumProvider.svelte';
+	import { Toaster } from 'svelte-5-french-toast';
 
 	const queryClient = new QueryClient();
 	let { children } = $props();
@@ -15,6 +16,7 @@
 <main>
 	<QueryClientProvider client={queryClient}>
 		<EthereumProvider>
+			<Toaster />
 			<header class="p-2 lg:p-5">
 				<DropdownWallets />
 			</header>

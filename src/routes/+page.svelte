@@ -12,6 +12,7 @@
 	import CloseIcon from '$lib/icons/CloseIcon.svelte';
 	import illustration from '$lib/assets/illustration.png';
 	import { wallet } from '$lib/stores/wallet.svelte';
+	import toast from 'svelte-5-french-toast';
 
 	const connectMutation = createOnConnectMutation();
 	const disconnectMutation = createOnDisconnectMutation();
@@ -22,10 +23,6 @@
 	const connectButtonText = $derived.by(() => {
 		if (account.address) {
 			return truncateText(account.address, 8);
-		}
-
-		if ($connectMutation.isError) {
-			return 'There was an error, please try again';
 		}
 
 		return 'Connect your wallet';
@@ -42,6 +39,12 @@
 
 		if ($getBalanceFromContractQuery.isSuccess) {
 			return `${$getBalanceFromContractQuery.data} USDT`;
+		}
+	});
+
+	$effect(() => {
+		if ($connectMutation.isError) {
+			toast.error('There was an error, please try again');
 		}
 	});
 </script>
